@@ -11,7 +11,7 @@ $ ls
 test.jpg
 $ docker run --rm -it -v $(pwd):/work redpeacock78/waifu2x -p 0 -m noise-scale --scale-ratio 2 --noise-level 2 -i test.jpg
 CPU: Intel(R) Core(TM) i7-4770HQ CPU @ 2.20GHz
-Processing file [1/1] "/work/icon.jpg":
+Processing file [1/1] "/work/test.jpg":
 Scaling image from 512x512 to 1024x1024
 
 Step 01/02: Denoising
