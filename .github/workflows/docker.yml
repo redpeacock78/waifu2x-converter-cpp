@@ -6,10 +6,10 @@ on:
       - master
 
 env:
-  img_name: waifu2x
-  arch_amd64: amd64
-  arch_arm64: arm64
-  arch_armv7: arm/v7
+  img_name: 'waifu2x'
+  arch_amd64: 'amd64'
+  arch_arm64: 'arm64'
+  arch_armv7: 'arm/v7'
 
 jobs:
   build:
@@ -17,9 +17,9 @@ jobs:
     strategy:
       matrix:
         arch:
-          - ${{ arch_amd64 }}
-          - ${{ arch_arm64 }}
-          - ${{ arch_armv7 }}
+          - ${{ env.arch_amd64 }}
+          - ${{ env.arch_arm64 }}
+          - ${{ env.arch_armv7 }}
     steps:
       - name: Create Arch Tag
         run: |
@@ -63,7 +63,7 @@ jobs:
         run: |
           docker manifest create \
             ${{ secrets.DOCKER_USERNAME }}/${{ env.img_name }}:latest \
-            ${{ secrets.DOCKER_USERNAME }}/${{ env.img_name }}:${{ arch_amd64 }} \
-            ${{ secrets.DOCKER_USERNAME }}/${{ env.img_name }}:${{ arch_arm64 }} \
-            ${{ secrets.DOCKER_USERNAME }}/${{ env.img_name }}:$(echo ${{ arch_armv7 }}|tr -d '/') && \
+            ${{ secrets.DOCKER_USERNAME }}/${{ env.img_name }}:${{ env.arch_amd64 }} \
+            ${{ secrets.DOCKER_USERNAME }}/${{ env.img_name }}:${{ env.arch_arm64 }} \
+            ${{ secrets.DOCKER_USERNAME }}/${{ env.img_name }}:$(echo "${{ env.arch_armv7 }}"|tr -d '/') && \
           docker manifest push ${{ secrets.DOCKER_USERNAME }}/${{ env.img_name }}:latest
