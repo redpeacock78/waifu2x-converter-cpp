@@ -1,10 +1,8 @@
-FROM alpine:latest
+FROM alpine:latest as builder
 
-ENV OPENCV_LOG_LEVEL=e
 ARG OPENCV_VERSION=3.4.16
 
-RUN apk add --update --no-cache --virtual .builder git gcc g++ cmake make && \
-  apk add --update --no-cache mesa-dev opencl-headers opencl-icd-loader-dev && \
+RUN apk add --update --no-cache git gcc g++ cmake make mesa-dev opencl-headers opencl-icd-loader-dev && \
   git clone https://github.com/opencv/opencv && \
   git clone https://github.com/opencv/opencv_contrib && \
   cd opencv_contrib && \
@@ -18,17 +16,20 @@ RUN apk add --update --no-cache --virtual .builder git gcc g++ cmake make && \
   make -j"$(nproc)" && \
   make install && \
   cd / && \
-  rm -rf opencv && \
-  rm -rf opencv_contrib && \
   git clone --depth 1 https://github.com/DeadSix27/waifu2x-converter-cpp && \
   cd waifu2x-converter-cpp && \
   mkdir out && cd out && \
   cmake .. && \
   make -j"$(nproc)" && \
-  make install && \
-  cd / && \
-  rm -rf waifu2x-converter-cpp && \
-  apk del --purge .builder && \
+  make install
+
+FROM alpine:latest
+
+ENV OPENCV_LOG_LEVEL=e
+
+COPY --from=builder /usr/local /usr/local
+
+RUN apk add --update --no-cache mesa-dev && \
   echo '#!/bin/sh' >> /usr/local/bin/docker_entrypoint.sh && \
   echo 'waifu2x-converter-cpp "$@"' >> /usr/local/bin/docker_entrypoint.sh && \
   chmod +x /usr/local/bin/docker_entrypoint.sh
