@@ -17,7 +17,7 @@ jobs:
     steps:
       - name: Create Arch Tag
         run: |
-          echo "arch_tag=$(echo ${{ matrix.arch }}|tr -d '/')" >> $GITHUB_ENV
+          echo "arch_tag=$(echo "${{ matrix.arch }}"|tr -d '/')" >> $GITHUB_ENV
       - uses: actions/checkout@v2
       - name: Login to Docker Hub
         if: ${{ github.event_name != 'pull_request' }}
