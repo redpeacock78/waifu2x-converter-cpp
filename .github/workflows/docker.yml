@@ -5,21 +5,15 @@ on:
     branches:
       - master
 
-env:
-  img_name: 'waifu2x'
-  arch_amd64: 'amd64'
-  arch_arm64: 'arm64'
-  arch_armv7: 'arm/v7'
-
 jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         arch:
-          - ${{ env.arch_amd64 }}
-          - ${{ env.arch_arm64 }}
-          - ${{ env.arch_armv7 }}
+          - amd64
+          - arm64
+          - arm/v7
     steps:
       - name: Create Arch Tag
         run: |
@@ -48,7 +42,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,node=max
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ secrets.DOCKER_USERNAME }}/${{ env.img_name }}:${{ env.arch_tag }}
+          tags: ${{ secrets.DOCKER_USERNAME }}/waifu2x:${{ env.arch_tag }}
   manifest:
     runs-on: ubuntu-latest
     needs: build
@@ -62,8 +56,8 @@ jobs:
       - name: Create manifest
         run: |
           docker manifest create \
-            ${{ secrets.DOCKER_USERNAME }}/${{ env.img_name }}:latest \
-            ${{ secrets.DOCKER_USERNAME }}/${{ env.img_name }}:${{ env.arch_amd64 }} \
-            ${{ secrets.DOCKER_USERNAME }}/${{ env.img_name }}:${{ env.arch_arm64 }} \
-            ${{ secrets.DOCKER_USERNAME }}/${{ env.img_name }}:$(echo "${{ env.arch_armv7 }}"|tr -d '/') && \
-          docker manifest push ${{ secrets.DOCKER_USERNAME }}/${{ env.img_name }}:latest
+            ${{ secrets.DOCKER_USERNAME }}/waifu2x:latest \
+            ${{ secrets.DOCKER_USERNAME }}/waifu2x:amd64 \
+            ${{ secrets.DOCKER_USERNAME }}/waifu2x:arch_arm64 \
+            ${{ secrets.DOCKER_USERNAME }}/waifu2x:armv7 && \
+          docker manifest push ${{ secrets.DOCKER_USERNAME }}/waifu2x:latest
