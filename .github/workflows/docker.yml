@@ -25,6 +25,8 @@ jobs:
         with:
           context: .
           file: ./Dockerfile
-          platforms: linux/amd64,linux/arm64/v8,linux/arm/v7,linux/arm/v6,linux/386
+          platforms: linux/amd64,linux/arm64/v8,linux/arm/v7
           push: true
+          cache-from: type=gha
+          cache-to: type=gha,node=max
           tags: ${{ secrets.DOCKER_USERNAME }}/waifu2x:latest
