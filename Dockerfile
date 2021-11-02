@@ -29,7 +29,7 @@ ENV OPENCV_LOG_LEVEL=e
 
 COPY --from=builder /usr/local /usr/local
 
-RUN apk add --update --no-cache mesa-dev && \
+RUN apk add --update --no-cache mesa-dev opencl-headers opencl-icd-loader && \
   echo '#!/bin/sh' >> /usr/local/bin/docker_entrypoint.sh && \
   echo 'waifu2x-converter-cpp "$@"' >> /usr/local/bin/docker_entrypoint.sh && \
   chmod +x /usr/local/bin/docker_entrypoint.sh
