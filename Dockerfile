@@ -25,6 +25,11 @@ RUN apk add --update --no-cache git gcc g++ cmake make mesa-dev opencl-headers o
 
 FROM alpine:latest
 
+LABEL org.opencontainers.image.authors="redpeacock78 <redpeacock78@dev.tamakasu.ga>"
+LABEL org.opencontainers.image.url="https://github.com/redpeacock78/waifu2x-converter-cpp"
+LABEL org.opencontainers.image.documentation="A Docker Automated Build Repository for DeadSix27/waifu2x-converter-cpp"
+LABEL org.opencontainers.image.source="https://github.com/redpeacock78/waifu2x-converter-cpp/blob/master/Dockerfile"
+
 ENV OPENCV_LOG_LEVEL=e
 
 COPY --from=builder /usr/local /usr/local
