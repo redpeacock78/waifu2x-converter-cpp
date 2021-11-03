@@ -18,7 +18,7 @@ jobs:
       - name: Create Arch Tag
         run: |
           echo "arch_tag=$(echo "${{ matrix.arch }}"|tr -d '/')" >> $GITHUB_ENV
-      - name: checkout
+      - name: Checkout
         uses: actions/checkout@v2
       - name: Cache Docker layers
         uses: actions/cache@v2
