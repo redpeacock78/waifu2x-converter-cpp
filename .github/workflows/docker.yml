@@ -58,6 +58,6 @@ jobs:
           docker manifest create \
             ${{ secrets.DOCKER_USERNAME }}/waifu2x:latest \
             ${{ secrets.DOCKER_USERNAME }}/waifu2x:amd64 \
-            ${{ secrets.DOCKER_USERNAME }}/waifu2x:arch_arm64 \
+            ${{ secrets.DOCKER_USERNAME }}/waifu2x:arm64 \
             ${{ secrets.DOCKER_USERNAME }}/waifu2x:armv7 && \
           docker manifest push ${{ secrets.DOCKER_USERNAME }}/waifu2x:latest
