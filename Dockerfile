@@ -1,7 +1,7 @@
 # Setup builder
 FROM alpine:latest as builder
 
-RUN apk add --update --no-cache git gcc g++ cmake make ninja \
+RUN apk add --update --no-cache git gcc g++ cmake ninja \
   mesa-dev opencl-headers opencl-icd-loader-dev
 
 
@@ -17,10 +17,9 @@ RUN git clone -b ${OPENCV_VERSION} --depth 1 https://github.com/opencv/opencv &&
   cd ../opencv && \
   mkdir release && cd release && \
   cmake -G "Ninja" -D CMAKE_BUILD_TYPE=Release -D OPENCV_EXTRA_MODULES_PATH=/opencv_contrib/modules \
-  -D CMAKE_INSTALL_PREFIX=/usr/local -D WITH_OPENJPEG=ON -D BUILD_PACKAGE=OFF \
-  -D BUILD_DOCS=OFF -D BUILD_PERF_TESTS=OFF -D BUILD_TESTS=OFF -D BUILD_opencv_apps=OFF \
-  -D WITH_IPP=OFF -D ENABLE_CXX11=ON .. && \
-  ninja && \
+  -D CMAKE_INSTALL_PREFIX=/usr/local -D BUILD_PACKAGE=OFF -D BUILD_DOCS=OFF -D BUILD_PERF_TESTS=OFF \
+  -D BUILD_TESTS=OFF -D BUILD_opencv_apps=OFF -D WITH_IPP=OFF -D ENABLE_CXX11=ON .. && \
+  ninja -j"$(nproc)" && \
   ninja install
 
 
@@ -34,9 +33,9 @@ COPY --from=opencv-builder /usr/local /usr/local
 RUN git clone --depth 1 https://github.com/DeadSix27/waifu2x-converter-cpp && \
   cd waifu2x-converter-cpp && \
   mkdir out && cd out && \
-  cmake .. && \
-  make -j"$(nproc)" && \
-  make install
+  cmake -G "Ninja" .. && \
+  ninja -j"$(nproc)" && \
+  ninja install
 
 
 FROM alpine:latest
