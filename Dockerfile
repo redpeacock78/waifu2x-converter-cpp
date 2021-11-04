@@ -8,19 +8,16 @@ RUN apk add --update --no-cache git gcc g++ cmake make \
 # OpenCV(https://github.com/opencv/opencv) built from source
 FROM builder as opencv-builder
 
-ARG OPENCV_VERSION=3.4.16
+ARG OPENCV_VERSION=4.3.0
 
 WORKDIR /
 
-RUN git clone https://github.com/opencv/opencv && \
-  git clone https://github.com/opencv/opencv_contrib && \
-  cd opencv_contrib && \
-  git checkout -b ${OPENCV_VERSION} refs/tags/${OPENCV_VERSION} && \
+RUN git clone -b ${OPENCV_VERSION} --depth 1 https://github.com/opencv/opencv && \
+  git clone -b ${OPENCV_VERSION} --depth 1 https://github.com/opencv/opencv_contrib && \
   cd ../opencv && \
-  git checkout -b ${OPENCV_VERSION} refs/tags/${OPENCV_VERSION} && \
   mkdir release && cd release && \
   cmake -D CMAKE_BUILD_TYPE=Release -D OPENCV_EXTRA_MODULES_PATH=/opencv_contrib/modules \
-  -D CMAKE_INSTALL_PREFIX=/usr/local -D OPENCV_BUILD_3RDPARTY_LIBS=ON -D BUILD_PACKAGE=OFF \
+  -D CMAKE_INSTALL_PREFIX=/usr/local -D WITH_OPENJPEG=ON -D BUILD_PACKAGE=OFF \
   -D BUILD_DOCS=OFF -D BUILD_PERF_TESTS=OFF -D BUILD_TESTS=OFF -D BUILD_opencv_apps=OFF \
   -D WITH_IPP=OFF -D ENABLE_CXX11=ON .. && \
   make -j"$(nproc)" && \
