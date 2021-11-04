@@ -1,7 +1,7 @@
 # Setup builder
 FROM alpine:latest as builder
 
-RUN apk add --update --no-cache git gcc g++ cmake ninja \
+RUN apk add --update --no-cache git alpine-sdk clang cmake ninja \
   mesa-dev opencl-headers opencl-icd-loader-dev
 
 
@@ -9,6 +9,8 @@ RUN apk add --update --no-cache git gcc g++ cmake ninja \
 FROM builder as opencv-builder
 
 ARG OPENCV_VERSION=4.3.0
+ENV CC=/usr/bin/clang
+ENV CXX=/usr/bin/clang++
 
 WORKDIR /
 
