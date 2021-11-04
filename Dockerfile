@@ -1,7 +1,7 @@
 # Setup builder
 FROM alpine:latest as builder
 
-RUN apk add --update --no-cache git gcc g++ cmake make nimja \
+RUN apk add --update --no-cache git gcc g++ cmake make ninja \
   mesa-dev opencl-headers opencl-icd-loader-dev
 
 
