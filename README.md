@@ -4,6 +4,9 @@
 ```console
 $ docker run --rm -it -v <host_dir>:/work redpeacock78/waifu2x -p 0 -m noise-scale --scale-ratio 2 --noise-level 2 -i <in image> -o <out image>
 ```
+```console
+$ docker run --rm -it -v <host_dir>:/work ghcr.io/redpeacock78/waifu2x -p 0 -m noise-scale --scale-ratio 2 --noise-level 2 -i <in image> -o <out image>
+```
 ## Example
 ```console
 $ cd test
